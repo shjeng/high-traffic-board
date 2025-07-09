@@ -1,4 +1,4 @@
-package board.article.api;
+package high_traffic_board.article.api;
 
 import high_traffic_board.article.service.response.ArticleResponse;
 import lombok.AllArgsConstructor;
