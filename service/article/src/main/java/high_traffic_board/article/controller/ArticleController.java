@@ -3,6 +3,7 @@ package high_traffic_board.article.controller;
 import high_traffic_board.article.service.ArticleService;
 import high_traffic_board.article.service.request.ArticleCreateRequest;
 import high_traffic_board.article.service.request.ArticleUpdateRequest;
+import high_traffic_board.article.service.response.ArticlePageResponse;
 import high_traffic_board.article.service.response.ArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,14 @@ public class ArticleController {
     @GetMapping("/v1/articles/{articleId}")
     public ArticleResponse read(@PathVariable Long articleId) {
         return articleService.read(articleId);
+    }
+
+    @GetMapping("/v1/articles")
+    public ArticlePageResponse readAll(
+            @RequestParam("boardId") Long boardId,
+            @RequestParam("page") Long page,
+            @RequestParam("pageSize") Long pageSize) {
+        return articleService.readAll(boardId, page, pageSize);
     }
 
     @PostMapping("/v1/articles")
