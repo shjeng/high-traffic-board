@@ -40,10 +40,15 @@ allprojects {
         annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     }
 
-    def querydslDir = 'build/generated/querydsl'
+//    def querydslDir = 'src/main/generated'
+    def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
     sourceSets {
         main.java.srcDirs += [ querydslDir ]
+    }
+
+    clean {
+        delete file(querydslDir)
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -58,6 +63,3 @@ allprojects {
         useJUnitPlatform()
     }
 }
-
-
-
