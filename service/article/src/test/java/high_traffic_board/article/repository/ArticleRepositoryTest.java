@@ -47,20 +47,7 @@ class ArticleRepositoryTest {
         System.out.println(stopWatch.prettyPrint());
     }
 
-    @Test
-    void getIdsTest() {
-        Long boardId = 1L;
-        Long offset = 100000L;
-        Long limit = 30L;
 
-        StopWatch stopWatch = new StopWatch();
-
-        stopWatch.start("QueryDSL");
-        List<Long> test = articleRepository.testLongGet(boardId, offset, limit);
-        stopWatch.stop();
-
-        System.out.println(stopWatch.prettyPrint());
-    }
     @Test
     void slowTest() {
         Long boardId = 1L;
@@ -91,5 +78,20 @@ class ArticleRepositoryTest {
         System.out.println(stopWatch.prettyPrint());
     }
 
+
+    @Test
+    void findInfiniteScrollTest() {
+        List<Article> articles = articleRepository.findAllIInfiniteScroll(1L, 30L);
+        for (Article article : articles) {
+            log.info("articleId = {}", article.getArticleId());
+        }
+
+        Long lastArticleId = articles.getLast().getArticleId();
+        List<Article> articles2 = articleRepository.findAllIInfiniteScroll(1L, 30L, lastArticleId);
+        for (Article article : articles2) {
+            log.info("articleId = {}", article.getArticleId());
+        }
+
+    }
 
 }

@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface ArticleCustomRepository {
     List<Article> customFindAll(Long boardId, Long offset, Long limit);
-    List<Long> testLongGet(Long boardId, Long offset, Long limit);
 }
