@@ -5,6 +5,7 @@ import high_traffic_board.article.service.response.ArticleResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.StopWatch;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
@@ -60,7 +61,6 @@ public class ArticleApiTest {
         for (ArticleResponse article : response.getArticles()) {
             System.out.println("articleId = " + article.getArticleId());
         }
-
     }
 
     void update(Long articleId) {
