@@ -33,7 +33,7 @@ public class DataInitializerV2 {
     void initialize() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (int i = 0; i < EXECUTE_COUNT; i++) {
-            int start = i + BULK_INSERT_SIZE;
+            int start = i * BULK_INSERT_SIZE;
             int end = (i + 1) * BULK_INSERT_SIZE;
             executorService.submit(() -> {
                 insert(start, end);
