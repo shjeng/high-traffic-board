@@ -65,6 +65,17 @@ public class CommentApiTest {
 
         /**
          * 1번 페이지 수행 결과
+         * response.getCommentCount() = 101
+         * comment.getCommentId() = 205657211069194240
+         *	comment.getCommentId() = 205657211144691716
+         * comment.getCommentId() = 205657211069194241
+         *	comment.getCommentId() = 205657211144691714
+         * comment.getCommentId() = 205657211069194242
+         *	comment.getCommentId() = 205657211144691719
+         * comment.getCommentId() = 205657211069194243
+         *comment.getCommentId() = 205657211144691721
+         * comment.getCommentId() = 205657211069194244
+         * comment.getCommentId() = 205657211144691715
          */
     }
 
