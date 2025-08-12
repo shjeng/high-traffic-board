@@ -86,6 +86,11 @@ public class ArticleLikeService {
 
     @Transactional
     public void likeOptimisticLock(Long articleId, Long userId) {
+        // 낙관적 락을 사용하여 좋아요를 추가
+        // 낙관적 락은 데이터베이스에서 버전 관리를 통해 동시성 문제를 해결
+        // 예를 들어, ArticleLikeCount 엔티티에 @Version 어노테이션을 사용하여 버전 필드를 추가
+        // 이 필드는 엔티티가 업데이트될 때마다 자동으로 증가하며, 이를 통해 동시성 충돌을 감지할 수 있다.
+        // 만약 버전이 안 맞으면 OptimisticLockException이 발생한다. -> 롤백
         articleLikeRepository.save(
                 ArticleLike.create(
                         snowflake.nextId(),

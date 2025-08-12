@@ -18,7 +18,7 @@ public class ArticleLikeCount {
     @Id
     private Long articleId;
     private Long likeCount;
-    @Version
+    @Version // 낙관적 락을 위한 어노테이션
     private Long version;
 
     public static ArticleLikeCount init(Long articleId, Long likeCount) {
