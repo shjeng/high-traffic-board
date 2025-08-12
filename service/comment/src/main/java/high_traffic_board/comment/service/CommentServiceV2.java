@@ -1,7 +1,9 @@
 package high_traffic_board.comment.service;
 
+import high_traffic_board.comment.entity.ArticleCommentCount;
 import high_traffic_board.comment.entity.CommentPath;
 import high_traffic_board.comment.entity.CommentV2;
+import high_traffic_board.comment.repository.ArticleCommentCountRepository;
 import high_traffic_board.comment.repository.CommentRepositoryV2;
 import high_traffic_board.comment.service.request.CommentCreateRequestV2;
 import high_traffic_board.comment.service.response.CommentPageResponse;
@@ -21,7 +23,7 @@ public class CommentServiceV2 {
     private final Snowflake snowflake = new Snowflake();
     private final CommentRepositoryV2 commentRepository;
     //    private final OutboxEventPublisher outboxEventPublisher;
-//    private final ArticleCommentCountRepository articleCommentCountRepository;
+    private final ArticleCommentCountRepository articleCommentCountRepository;
 
     @Transactional
     public CommentResponse create(CommentCreateRequestV2 request) {
@@ -40,12 +42,12 @@ public class CommentServiceV2 {
                 )
         );
 
-//        int result = articleCommentCountRepository.increase(request.getArticleId());
-//        if (result == 0) {
-//            articleCommentCountRepository.save(
-//                    ArticleCommentCount.init(request.getArticleId(), 1L)
-//            );
-//        }
+        int result = articleCommentCountRepository.increase(request.getArticleId());
+        if (result == 0) {
+            articleCommentCountRepository.save(
+                    ArticleCommentCount.init(request.getArticleId(), 1L)
+            );
+        }
 
 //        outboxEventPublisher.publish(
 //                EventType.COMMENT_CREATED,
@@ -86,6 +88,7 @@ public class CommentServiceV2 {
                 .filter(not(CommentV2::getDeleted))
                 .ifPresent(comment -> {
                     if (hasChildren(comment)) {
+                        // 자식이 있는 경우에는 논리적인 삭제
                         comment.delete();
                     } else {
                         delete(comment);
@@ -116,7 +119,7 @@ public class CommentServiceV2 {
 
     private void delete(CommentV2 comment) {
         commentRepository.delete(comment);
-//        articleCommentCountRepository.decrease(comment.getArticleId());
+        articleCommentCountRepository.decrease(comment.getArticleId());
         if (!comment.isRoot()) {
             commentRepository.findByPath(comment.getCommentPath().getParentPath())
                     .filter(CommentV2::getDeleted)
@@ -130,7 +133,8 @@ public class CommentServiceV2 {
                 commentRepository.findAll(articleId, (page - 1) * pageSize, pageSize).stream()
                         .map(CommentResponse::from)
                         .toList(),
-                commentRepository.count(articleId, PageLimitCalculator.calculatePageLimit(page, pageSize, 10L))
+//                commentRepository.count(articleId, PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)) // 원래 count를 계산해서 사용하였지만,
+                count(articleId) // 현재는 count를 DB에 직접 넣어놨기 때문에 이렇게 조회도 가능함.
         );
     }
 
@@ -144,9 +148,9 @@ public class CommentServiceV2 {
                 .toList();
     }
 
-//    public Long count(Long articleId) {
-//        return articleCommentCountRepository.findById(articleId)
-//                .map(ArticleCommentCount::getCommentCount)
-//                .orElse(0L);
-//    }
+    public Long count(Long articleId) {
+        return articleCommentCountRepository.findById(articleId)
+                .map(ArticleCommentCount::getCommentCount)
+                .orElse(0L);
+    }
 }
