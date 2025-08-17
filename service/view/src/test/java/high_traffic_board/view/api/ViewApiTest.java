@@ -24,7 +24,7 @@ public class ViewApiTest {
         }
         latch.await();
         Long count = restClient.get()
-                .uri("/v1/article-views/articles/{articleId}/count", 1L)
+                .uri("/v1/article-views/articles/{articleId}/count", 3L)
                 .retrieve()
                 .body(Long.class);
         System.out.println("count = " + count);
