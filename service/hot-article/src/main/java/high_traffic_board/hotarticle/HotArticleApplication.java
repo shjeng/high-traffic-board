@@ -1,4 +1,4 @@
-package high_traffic_board.like;
+package high_traffic_board.hotarticle;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
